@@ -191,7 +191,11 @@
       }
 
       addLoopBtn.addEventListener('click', () => {
-        if (loops.length === 0) return;
+        // Songs whose loops haven't been marked yet start from the top
+        if (loops.length === 0) {
+          createLoopElement('0:00', '0:30');
+          return;
+        }
         const last = loops[loops.length - 1];
         const startVal = last.end.value;
         const startSec = parseTime(startVal);

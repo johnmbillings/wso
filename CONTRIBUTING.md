@@ -35,6 +35,15 @@
    ```
 2. Reference the key in each song's `concert` field
 
+### Archive a concert (after it has been performed)
+1. Add `"archived": true` to its entry under `"concerts"` in `songs.json`:
+   ```json
+   "transformations": { "name": "transformations", "date": "may 8, 2026", "archived": true }
+   ```
+2. Add the new concert above it and point the new songs at its key
+3. That's it — archived concerts drop below a "past concerts" divider on the
+   index (dimmed, still clickable), and the virtual concert stops playing them
+
 ### Remove a song
 1. Delete the entry from `songs.json`
 2. Commit and push — nothing else to clean up

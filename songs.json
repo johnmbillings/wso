@@ -1,8 +1,30 @@
 {
   "concerts": {
-    "transformations": { "name": "transformations", "date": "may 8, 2026" }
+    "fall-2026": { "name": "fall 2026", "date": "date tbd" },
+    "transformations": { "name": "transformations", "date": "may 8, 2026", "archived": true }
   },
   "songs": {
+    "copland-fanfare": {
+      "title": "copland — fanfare for the common man",
+      "videoId": "9dljTJ9qJ4U",
+      "concert": "fall-2026",
+      "order": 1,
+      "loops": []
+    },
+    "barber-violin-concerto": {
+      "title": "barber — violin concerto",
+      "videoId": "arZzczeU_0c",
+      "concert": "fall-2026",
+      "order": 2,
+      "loops": []
+    },
+    "stravinsky-firebird-suite": {
+      "title": "stravinsky — firebird suite (1919)",
+      "videoId": "je6qjoAw7cc",
+      "concert": "fall-2026",
+      "order": 3,
+      "loops": []
+    },
     "coleman-umoja": {
       "title": "valerie coleman — umoja",
       "videoId": "1m6II3pqTsI",

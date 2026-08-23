@@ -17,9 +17,14 @@ Keys are internal concert identifiers (slugs). Values are display metadata.
 
 ```json
 "concerts": {
+  "fall-2026": {
+    "name": "fall 2026",
+    "date": "date tbd"
+  },
   "transformations": {
     "name": "transformations",
-    "date": "may 8, 2026"
+    "date": "may 8, 2026",
+    "archived": true
   }
 }
 ```
@@ -29,6 +34,7 @@ Keys are internal concert identifiers (slugs). Values are display metadata.
 |---|---|---|---|
 | `name` | string | yes | Display name (shown on the index page) |
 | `date` | string | no | Display date, free-form (shown next to name) |
+| `archived` | boolean | no | `true` once the concert has been performed. Index sorts it below a "past concerts" divider and dims it; `concert.html` skips it. Song pages keep working. |
 
 ### Adding a new concert
 ```json
@@ -39,6 +45,16 @@ Keys are internal concert identifiers (slugs). Values are display metadata.
 ```
 
 Songs reference concerts by their key (e.g. `"concert": "summer-2026"`).
+
+Active concerts render in the order they appear in this object; archived ones
+are always pushed to the bottom, so put the current concert first.
+
+### Archiving a concert
+Add `"archived": true` to it. Nothing else changes — its songs, loops, and
+`song.html?s=<slug>` links all stay live, just dimmed and moved below the
+"past concerts" divider. The virtual concert then plays only the remaining
+active concert(s). If *every* concert is archived, `concert.html` falls back
+to playing everything rather than showing an empty setlist.
 
 ## `songs` object
 

@@ -152,6 +152,52 @@ main {
   white-space: nowrap;
 }
 
+/* ── archived concerts ── */
+.past-label {
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  text-align: center;
+  margin: 3rem 0 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.past-label::after {
+  content: '';
+  display: block;
+  width: min(12rem, 50%);
+  height: 1px;
+  margin: 0.9rem auto 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+}
+
+.concert.archived .concert-name {
+  color: rgba(255,255,255,0.45);
+  font-size: 1.2rem;
+}
+
+.concert.archived .concert-date {
+  color: rgba(255,255,255,0.22);
+}
+
+.concert.archived a {
+  color: rgba(255,255,255,0.4);
+  font-size: 1.05rem;
+}
+
+.concert.archived .composer {
+  color: rgba(255,255,255,0.22);
+}
+
+.concert.archived a:hover,
+.concert.archived a:focus {
+  color: rgba(255,255,255,0.85);
+}
+
 /* ── song list ── */
 ul {
   list-style: none;

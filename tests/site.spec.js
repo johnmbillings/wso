@@ -15,9 +15,32 @@ test('index page song order matches program', async ({ page }) => {
   await page.goto(BASE + '/index.html');
   await page.waitForSelector('.concert');
   const titles = await page.$$eval('main a', links => links.map(a => a.textContent.trim()));
-  expect(titles[0]).toContain('umoja');
-  expect(titles[1]).toContain('haydn');
-  expect(titles[2]).toContain('mahler');
+  expect(titles[0]).toContain('fanfare');
+  expect(titles[1]).toContain('violin concerto');
+  expect(titles[2]).toContain('firebird');
+});
+
+test('index page lists archived concerts last, under a past label', async ({ page }) => {
+  await page.goto(BASE + '/index.html');
+  await page.waitForSelector('.concert');
+
+  const sections = await page.$$eval('.concert', els => els.map(el => ({
+    name: el.querySelector('.concert-name').textContent.trim(),
+    archived: el.classList.contains('archived')
+  })));
+  expect(sections[0].archived).toBe(false);
+  expect(sections[sections.length - 1].archived).toBe(true);
+  expect(sections[sections.length - 1].name).toBe('transformations');
+
+  const pastLabel = await page.textContent('.past-label');
+  expect(pastLabel).toBe('past concerts');
+});
+
+test('archived concert songs are still reachable', async ({ page }) => {
+  await page.goto(BASE + '/song.html?s=coleman-umoja');
+  await page.waitForSelector('.loop');
+  const loops = await page.$$('.loop');
+  expect(loops.length).toBeGreaterThan(0);
 });
 
 // === Song page ===
@@ -48,6 +71,16 @@ test('song page renders loop controls', async ({ page }) => {
   expect(loops.length).toBeGreaterThan(0);
 });
 
+test('song page with no loops yet can add one', async ({ page }) => {
+  await page.goto(BASE + '/song.html?s=copland-fanfare');
+  await page.waitForFunction(() => document.getElementById('song-title').textContent !== 'loading\u2026');
+  expect(await page.$$('.loop')).toHaveLength(0);
+  await page.click('#add-loop');
+  const loops = await page.$$('.loop');
+  expect(loops.length).toBe(1);
+  expect(await page.inputValue('.loop .start')).toBe('0:00');
+});
+
 test('song page renders loop labels', async ({ page }) => {
   await page.goto(BASE + '/song.html?s=brahms-haydn-variations');
   await page.waitForSelector('.loop-label');
@@ -58,11 +91,15 @@ test('song page renders loop labels', async ({ page }) => {
 });
 
 // === Concert page ===
-test('concert page loads playlist', async ({ page }) => {
+test('concert page plays only the current concert', async ({ page }) => {
   await page.goto(BASE + '/concert.html');
   await page.waitForSelector('#setlist li');
-  const items = await page.$$('#setlist li');
+  const items = await page.$$eval('#setlist li', els => els.map(el => el.textContent.trim()));
   expect(items.length).toBe(3);
+  expect(items[0]).toContain('fanfare');
+  expect(items[2]).toContain('firebird');
+  const subtitle = await page.textContent('#concert-subtitle');
+  expect(subtitle).toContain('fall 2026');
 });
 
 test('concert page start button exists and is clickable', async ({ page }) => {

@@ -59,10 +59,35 @@
           concerts[concert].push([slug, song]);
         });
 
+        // Active concerts first (in songs.json order), archived ones last
+        const metaOrder = Object.keys(concertMeta);
+        const isArchived = key => !!(concertMeta[key] && concertMeta[key].archived);
+        const rank = key => {
+          const i = metaOrder.indexOf(key);
+          return i === -1 ? metaOrder.length : i;
+        };
+        const concertKeys = Object.keys(concerts).sort((a, b) => {
+          if (isArchived(a) !== isArchived(b)) return isArchived(a) ? 1 : -1;
+          return rank(a) - rank(b);
+        });
+
         let delay = 0.5;
-        for (const [concert, songs] of Object.entries(concerts)) {
+        let pastLabelAdded = false;
+        for (const concert of concertKeys) {
+          const songs = concerts[concert];
+          const archived = isArchived(concert);
+
+          if (archived && !pastLabelAdded) {
+            pastLabelAdded = true;
+            const pastLabel = document.createElement('p');
+            pastLabel.className = 'past-label';
+            pastLabel.textContent = 'past concerts';
+            pastLabel.style.animationDelay = delay + 's';
+            container.appendChild(pastLabel);
+          }
+
           const section = document.createElement('div');
-          section.className = 'concert';
+          section.className = archived ? 'concert archived' : 'concert';
           section.style.animationDelay = delay + 's';
           delay += 0.15;
 

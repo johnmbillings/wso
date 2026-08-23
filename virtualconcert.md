@@ -27,6 +27,13 @@ The index page song order was also updated to reflect the concert program order 
 ### Index page
 - "virtual concert" link added in `<nav class="tools">` below "polyrhythm practice"
 
+## Concert archiving (added august 2026)
+The playlist is filtered to concerts without `"archived": true`, so the page
+always plays the current program rather than every song in `songs.json`. The
+subtitle is generated from the active concert name(s) instead of being
+hardcoded. If every concert is archived, it falls back to playing everything —
+better than an empty setlist.
+
 ## Known limitations
 - Each piece plays from the very beginning of the YouTube video (no start offset)
 - The Mahler video includes other movements — the 1st movement section ends around 40:00 but the video continues. Could add start/end times per piece if needed.

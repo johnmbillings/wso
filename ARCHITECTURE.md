@@ -30,6 +30,7 @@
 - Fetches `songs.json`
 - Groups songs by concert
 - Sorts songs within a concert by the `order` field
+- Sorts concert sections: active first (in `songs.json` order), `archived` ones last under a "past concerts" divider
 - Renders concert sections with names, dates, and song links
 - Links to `song.html?s=<slug>` for each song
 - Includes a tools nav at the bottom with links to `polyrhythm.html` and `concert.html`
@@ -43,7 +44,7 @@
 - `checkLoop` runs on a 200ms interval (only while `loopActive`) to detect loop-end and seek back
 
 ### `concert.html`
-- Fetches `songs.json`, builds a playlist sorted by `order`
+- Fetches `songs.json`, builds a playlist from the non-`archived` concerts, sorted by `order`
 - Embeds YouTube iframe player
 - On `YT.PlayerState.ENDED`, advances to the next song (wraps to first)
 - Shows a setlist with current piece highlighted

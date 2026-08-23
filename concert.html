@@ -80,7 +80,7 @@
     <span>virtual concert</span>
     <img src="feather.svg" alt="" class="feather">
   </div>
-  <p class="subtitle">transformations — on loop</p>
+  <p class="subtitle" id="concert-subtitle">on loop</p>
 
   <p class="subtitle" style="margin-top:0; font-size:0.85rem;">use the start concert button below to begin — pieces will play in order and loop automatically</p>
 
@@ -115,6 +115,7 @@
     const setlistEl = document.getElementById('setlist');
     const loopBadge = document.getElementById('loop-badge');
     const startBtn = document.getElementById('start-btn');
+    const subtitleEl = document.getElementById('concert-subtitle');
 
     function parseTime(t) {
       const parts = t.split(':');
@@ -136,9 +137,23 @@
         return r.json();
       })
       .then(data => {
-        playlist = Object.entries(data.songs || {})
+        const concertMeta = data.concerts || {};
+        const active = Object.keys(concertMeta).filter(k => !concertMeta[k].archived);
+        const allSongs = Object.entries(data.songs || {});
+        // Only the current concert plays — archived concerts stay browsable on the index
+        let entries = allSongs.filter(([, song]) => active.indexOf(song.concert) !== -1);
+        if (entries.length === 0) entries = allSongs;
+
+        playlist = entries
           .sort((a, b) => (a[1].order || 99) - (b[1].order || 99))
           .map(([slug, song]) => song);
+
+        const names = active
+          .filter(k => entries.some(([, song]) => song.concert === k))
+          .map(k => concertMeta[k].name);
+        if (names.length > 0) {
+          subtitleEl.textContent = names.join(' + ') + ' — on loop';
+        }
 
         playlist.forEach((song, i) => {
           const li = document.createElement('li');
